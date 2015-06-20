@@ -1,0 +1,34 @@
+{% extends 'base_template.html' %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+{% block login %}
+{% endblock login %}
+
+{% block banner %}
+{% endblock banner %}
+{% block middle %}
+    <div class="single_form rewards container">
+        <div class="bg">
+            <h2>Login</h2>
+            {% include "security/_messages.html" %}
+
+            <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+                <div class="errors">
+                    {% for error in login_user_form.email.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                    {% for error in login_user_form.password.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {{ login_user_form.hidden_tag() }}
+                <input type="hidden" value="/dashboard" name="next"/>
+                <input type="email" name="email" value="{{ login_user_form.email.data or '' }}" placeholder="Email"
+                       required/>
+                <br/>
+                <input type="password" name="password" placeholder="Password" required/>
+                <br/>
+                <input type="submit" value="Login" class="btn btn-primary"/>
+            </form>
+        </div>
+    </div>
+{% endblock middle %}

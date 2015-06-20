@@ -1,0 +1,70 @@
+{% extends 'admin/base_template.html' %}
+{% block body %}
+    <h3>Stocks</h3>
+    <table class="table-bordered table table-striped tablesorter">
+        <thead>
+        <tr>
+            <th>Studio</th>
+            <th>Used</th>
+            <th>Quantity</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for s in studios %}
+            {% for stock in s.stocks %}
+                <tr>
+                    <td>{{ s.name }}</td>
+                    <td>{{ stock.used }}</td>
+                    <td>{{ stock.quantity }}</td>
+                    <td>{{ stock.start_date.strftime('%B %d, %Y') }}</td>
+                    <td>{{ stock.end_date.strftime('%B %d, %Y') }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <h3>Usage</h3>
+    <table class="table-bordered table table-striped tablesorter" id="tablesorter">
+        <thead>
+        <tr>
+            <th>Studio</th>
+            <th>Package</th>
+            <th>Used</th>
+            <th>Quota</th>
+            <th>Attended</th>
+            <th>Absent</th>
+            <th>Cancelled</th>
+            <th>Rejected</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for s in studios %}
+            {% for q in s.active_quotas %}
+                <tr>
+                    <td>{{ s.name }}</td>
+                    <td>{{ q.package.name }}</td>
+                    <td>{{ q.used }}</td>
+                    <td>{{ q.quota }}</td>
+                    <td>{{ q.bookings('Attended')|length }}</td>
+                    <td>{{ q.bookings('Absent')|length }}</td>
+                    <td>{{ q.bookings('Cancelled')|length }}</td>
+                    <td>{{ q.bookings('Rejected')|length }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+{% block tail_js %}
+    {{ super() }}
+    <script src="{{ url_for('static',filename='js/tablesorter.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tablesorter').tablesorter();
+        });
+    </script>
+
+{% endblock tail_js %}

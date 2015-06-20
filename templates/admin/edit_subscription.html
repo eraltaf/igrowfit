@@ -1,0 +1,13 @@
+{% extends 'admin/model/edit.html' %}
+
+{% block body %}
+
+    {% call lib.form_tag(form) %}
+        {{ lib.render_field(form,form.user) }}
+        {{ lib.render_field(form,form.package) }}
+        {{ lib.render_field(form,form.max_concurrent_booking) }}
+        {{ lib.render_field(form,form.max_booking) }}
+        {{ lib.render_field(form,form.booked) }}
+        {{ lib.render_form_buttons(return_url, extra()) }}
+    {% endcall %}
+{% endblock %}

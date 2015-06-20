@@ -1,0 +1,124 @@
+// -----------------------------------------------------------
+// PROJECT SETTINGS
+// Based on the structure from http://gravityframework.com/
+// Only put variables here.
+// No Actual styles should be put here
+// -----------------------------------------------------------
+
+@function image-width($img-file) {
+  $value: null !default;
+  @each $id in $map-images {
+    @if nth($id,2) == $img-file {
+      $value: nth($id, 3);
+    }
+  }
+  @return $value;
+}
+
+@function image-height($img-file) {
+  $value: null !default;
+  @each $id in $map-images {
+    @if nth($id,2) == $img-file {
+      $value: nth($id, 4);
+    }
+  }
+  @return $value;
+}
+
+@mixin bg-img($img-file) {
+  background: url("../images/" + $img-file);
+  width: image-width($img-file);
+  height: image-height($img-file);
+}
+
+@mixin bg-img-retina($img-file) {
+  background: url("../images/" +$img-file);
+  background-size: 100%;
+  width: (image-width($img-file) / 2);
+  height: (image-height($img-file) / 2);
+}
+
+@mixin viewport-xs() {
+  @media only screen and (max-width: $screen-xs-min) {
+    @content;
+  }
+}
+
+@mixin viewport-sm() {
+  @media only screen and (max-width: $screen-sm-min) {
+    @content;
+  }
+}
+
+@mixin viewport-md() {
+  @media only screen and (max-width: $screen-md-min) {
+    @content;
+  }
+}
+
+@mixin embed_font($fontname, $filename) {
+  @font-face {
+    font-family: $fontname;
+    src: url('../fonts/#{$filename}.eot');
+    src: url('../fonts/#{$filename}.eot?#iefix') format('embedded-opentype'), url('../fonts/#{$filename}.woff') format('woff'), url('../fonts/#{$filename}.ttf') format('truetype'), url('../fonts//#{$filename}') format('svg');
+  }
+}
+
+$content-width: 0.9;
+@mixin centralize() {
+  width: percentage($content-width);
+  margin: 0 auto;
+}
+
+// -----------------------------------------------------------
+// FONT COLORS
+// -----------------------------------------------------------
+
+$black: #000;
+$white: #fff;
+$gray: #555;
+$grayLight: #999;
+$grayLighter: #eee;
+$grayDark: #333;
+$grayDarker: #222;
+
+$grey: #555;
+$greyLight: #999;
+$greyLighter: #eee;
+$greyDark: #333;
+$greyDarker: #222;
+
+$blue: #1ab7d3;
+$light-blue: #73a0d0;
+$dark-blue: #1561b0;
+$green: #07d38a;
+$red: #e40f42;
+$yellow: #ffc40d;
+$orange: #f89406;
+$pink: #de4f60;
+$purple: #7a43b6;
+$iconColor: #8492a0;
+
+// -----------------------------------------------------------
+// FONT FAMILIES
+// -----------------------------------------------------------
+@include embed_font('Gotham-Book', 'Gotham-Book');
+@include embed_font('Gotham-Medium', 'Gotham-Medium');
+$sans: 'Gotham-Book', sans-serif;
+$sans-bold: 'Gotham-Medium', sans-serif;
+$serif: Georgia, Times, "Times New Roman", serif;
+
+// -----------------------------------------------------------
+// FONT SIZES
+// -----------------------------------------------------------
+
+$fontSize: 16px;
+
+$headerFontFamily: $sans;
+$headerFontColor: $grayLight;
+$headerFontWeight: 700;
+
+$bodyFontFamily: $sans;
+$bodyFontColor: $grayLight;
+
+

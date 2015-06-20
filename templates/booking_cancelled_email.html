@@ -1,0 +1,15 @@
+<h2>The following booking is cancelled</h2>
+
+<ul>
+    <li><b>Name: </b>{{ booking.sub.user.name }}</li>
+    <li><b>Package: </b>{{ booking.sub.package.name }}</li>
+    <li><b>Studio: </b>{{ booking.schedule.studio_class.studio.name }}</li>
+
+    <li><b>Class: </b> {{ booking.schedule.studio_class.name }}</li>
+
+    <li><b>Date: </b> {{ booking.schedule.start_time.strftime('%b %d, %Y') }}</li>
+
+    <li><b>Time: </b> {{ booking.schedule.start_time.strftime('%H:%M') }}
+        - {{ booking.schedule.end_time.strftime('%H:%M') }}
+    </li>
+</ul>

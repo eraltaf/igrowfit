@@ -1,0 +1,25 @@
+{% extends 'simpler_template.html' %}
+{% block user_nav %}
+    {#    Overwrite base_template to remove user_nav#}
+{% endblock user_nav %}
+{% block middle %}
+    <div class="single_form">
+        {% if result %}
+            <h2>{{ result['result'] }}</h2>
+            <h4>{{ result['message'] }}</h4>
+        {% else %}
+            <form action="" method="POST" class="rejection">
+                <h2>Reject Booking</h2>
+
+                <h3>{{ booking.schedule.studio_class.name }}</h3>
+                <h5>{{ booking.schedule.start_time.strftime('%b %d, %Y %I:%M %p') }}
+                    - {{ booking.schedule.end_time.strftime('%I:%M %p') }}</h5>
+                <label for="reason">Please specify a reason and <br/> suggest
+                    an alternative class, if possible.</label>
+                <br/>
+                <textarea name="reason" required></textarea>
+                <input class="btn btn-danger" type="submit" value="REJECT"/>
+            </form>
+        {% endif %}
+    </div>
+{% endblock middle %}

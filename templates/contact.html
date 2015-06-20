@@ -1,0 +1,21 @@
+{% extends 'simpler_template.html' %}
+{% block middle %}
+    <div class="single_form">
+        {% if result %}
+            <h2>{{ result['result'] }}</h2>
+            <h4>{{ result['message'] }}</h4>
+        {% else %}
+            <form action="" method="POST" class="contact">
+            <h2>
+            	{% if type=='feedback' %}
+                Feedback
+                {% else %}
+                Suggest a Studio/Gym
+                {% endif %}
+                </h2>
+                <textarea name="message" required></textarea>
+                <input class="btn btn-primary" type="submit" value="SUBMIT"/>
+            </form>
+        {% endif %}
+    </div>
+{% endblock middle %}

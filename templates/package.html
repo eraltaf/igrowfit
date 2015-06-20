@@ -1,0 +1,141 @@
+{% extends 'simpler_template.html' %}
+{% block user_nav %}
+    <div class="login pull-right">
+        <a href="/logout" class="btn btn-primary">Logout</a>
+    </div>
+{% endblock user_nav %}
+{% block middle %}
+    <div class="content container studio-view">
+        <h3>
+            Usage
+        </h3>
+        <table class="table-bordered table table-striped tablesorter">
+            <thead>
+            <tr>
+                <th>Studio</th>
+                <th>Used</th>
+                <th>Quota</th>
+                <th>Attended</th>
+                <th>Absent</th>
+                <th>Cancelled</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for q in package.studio_quotas %}
+                <tr>
+                    <td>{{ q.studio.name }}</td>
+                    <td>{{ q.used }}</td>
+                    <td>{{ q.quota }}</td>
+                    <td>{{ q.bookings('Attended')|length }}</td>
+                    <td>{{ q.bookings('Absent')|length }}</td>
+                    <td>{{ q.bookings('Cancelled')|length }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <h3>
+            Employees
+        </h3>
+        <table class="table-bordered table table-striped tablesorter">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Attended</th>
+                <th>Absent</th>
+                <th>Cancelled</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for s in package.subs[start:start+50] %}
+                <tr>
+                    <td>{{ s.user.name }}</td>
+                    <td>{{ s.attended }}</td>
+                    <td>{{ s.absent }}</td>
+                    <td>{{ s.cancelled }}</td>
+                    <td>{% if s.user.active %}
+                        <a href="javascript:void(0)"
+                           onclick="toggle_user('{{ s.user.id }}',this)"
+                           class="btn btn-danger btn-sm">Disable
+                        </a>
+                    {% else %}
+                        <a href="javascript:void(0)"
+                           onclick="toggle_user('{{ s.user.id }}',this)"
+                           class="btn btn-warning btn-sm">Enable</a>
+                    {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <ul class="pagination pagination-sm">
+            {% for n in range(0,pages) %}
+                <li {% if start==n*50 %} class="active"{% endif %}>
+                    <a href="/package/{{ package.id }}?start={{ n*50 }}">
+                        {{ n+1 }}</a></li>
+            {% endfor %}
+        </ul>
+
+
+        <div class="single_form">
+            <h3>
+                Add Employee
+            </h3>
+            <input type="text" name="name" id="name" placeholder="Name"/><br/>
+            <input type="email" name="email" placeholder="Email"/><br/>
+            <input type="text" name="nric"
+                   placeholder="NRIC/EmploymentID"/><br/>
+            <input type="button" value="Submit" class="btn btn-primary btn-sm"
+                   onclick="add_employee()"/>
+        </div>
+    </div>
+    <script>
+        function toggle_user(id, div) {
+            var enabled = $(div).html() == 'Disable';
+            var message = 'Are you sure to';
+            if (enabled) {
+                message += ' disable login for this employee';
+            } else {
+                message += ' enable login for this employee';
+            }
+            if (confirm(message)) {
+                $.get('/toggle-user/' + id, function (data) {
+                    if (data == 'done') {
+                        if (enabled) {
+                            $(div).removeClass('btn-danger');
+                            $(div).addClass('btn-warning');
+                            $(div).html('Enable');
+                        } else {
+                            $(div).addClass('btn-danger');
+                            $(div).removeClass('btn-warning');
+                            $(div).html('Disable');
+                        }
+                    } else {
+                        alert(data);
+                    }
+                });
+            }
+        }
+    function add_employee(){
+        var email=$('input[name=email]').val();
+        var name=$('input[name=name]').val();
+        var nric=$('input[name=nric]').val();
+        if(!validateEmail(email)){
+            alert('Please provide a valid email address.');
+            return;
+        }
+        if(name.length>0&&nric.length>4){
+            $.post(document.location.href,{email:email,name:name,nric:nric},function(data){
+               if(data!='Success'){
+                   alert(data)
+               }else{
+                   alert('User created successfully');
+                   document.location.href=document.location.href;
+               }
+            });
+        }else{
+            alert('Please fill in all details');
+        }
+    }
+    </script>
+{% endblock %}

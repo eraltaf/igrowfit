@@ -1,0 +1,113 @@
+{% extends "base_template.html" %}
+{% block middle %}
+
+    <div class="content container">
+        <div class="searchbar">
+            <h3>find the perfect workout class</h3>
+
+            <form method="GET" onsubmit="return validate_search();">
+                <input type="text" name="keyword" id="keyword"
+                       value="{{ request.args.get('keyword','')|upper }}"
+                       placeholder="TYPE OF CLASS OR ACTIVITY">
+                <input type="text" name="date" id="date" value="{{ request.args.get('date','') }}" placeholder="DATE"/>
+                <input type="hidden" name="time" id="time" value="{{ request.args.get('time','') }}"/>
+
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle {{ request.args.get('time') or 'empty' }}"
+                            type="button" id="timeDropdown"
+                            data-toggle="dropdown">
+                        {{ request.args.get('time') or 'TIME' }}
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="timeDropdown">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);"
+                                                   onclick="selectTime(this)">ANY TIME</a>
+                        </li>
+                        {% for x in range(10,22) %}
+
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);"
+                                                       onclick="selectTime(this)">{{ x }}:00</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <input type="submit" value="SEARCH" class="btn btn-primary"/>
+            </form>
+        </div>
+
+        <div class="result">
+            {% if results =='home' %}
+                <h2>start your workout</h2>
+
+                <div class="holder">
+                    <div class="gutter-sizer"></div>
+                    {% for k,v in categories %}
+                        <div class="category home {{ k }}">
+                            <h2> {{ v }} </h2>
+
+                            <div class="cover"></div>
+                            <div class="classes">
+                                {% for c in classes[k] %}
+                                    <a href="/?keyword={{ c }}">{{ c }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="holder">
+                    <div class="gutter-sizer"></div>
+                    {% if results|length == 0 %}
+                        <div class="schedule not-found ">
+                            <h3>Sorry, no classes found</h3>
+
+                            <p>Please search for another keyword or date</p>
+                        </div>
+                    {% else %}
+                        {% for r in results %}
+
+                            <div class="schedule">
+                                <img class="logo" src="{{ r.studio.photo_url }}"/>
+
+                                <h2>{{ r.studio_class.name }}</h2>
+
+                                <p>
+                                    {{ r.start_time.strftime('%b %d, %Y') }}
+                                    <br/>
+                                    {{ r.start_time.strftime('%H:%M') }} -
+                                    {{ r.end_time.strftime('%H:%M') }}<br/>
+                                </p>
+
+                                <p>{{ r.studio.address or '' }}</p>
+
+                                <div class="details hidden">
+                                    {% if r.studio_class.description %}
+                                        <h3>ABOUT {{ r.studio_class.name }}</h3>
+                                        <p>{{ r.studio_class.description }}</p>
+                                    {% endif %}
+                                    {% if r.studio.description %}
+                                        <h3>ABOUT {{ r.studio.name }}</h3>
+                                        <p>{{ r.studio.description }}</p>
+                                    {% endif %}
+
+
+                                </div>
+                                {% if can_book == 'True' %}
+                                    <a class="btn btn-sm btn-book" onclick="book('{{ r.id }}')">BOOK</a>
+                                {% elif can_book=='Login' %}
+                                    <a class="btn btn-sm btn-book" href="/login">Login to Book</a>
+                                {% else %}
+                                    <a class="btn btn-sm btn-book" onclick="alert('{{ can_book }}')">BOOK</a>
+                                {% endif %}
+                                <a class="btn btn-sm btn-more" onclick="toggle_details(this)">MORE</a>
+
+
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock middle %}

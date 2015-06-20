@@ -1,0 +1,49 @@
+{% extends "dashboard.html" %}
+{% block btns %}
+    <a class="btn-dashboard "
+       href="{{ url_for('dashboard') }}">UPCOMING CLASSES</a>
+    <a class="btn-dashboard active" href="{{ url_for('history') }}">CLASSES ATTENDED</a>
+{% endblock btns %}
+{% block banner %}
+{% endblock %}
+
+{% block classes %}
+
+    <h4>PAST CLASSES</h4>
+    {% if bookings|length == 0 %}
+        <div class="upcoming" style="text-align:center">
+            <p style="margin-bottom:10px;">NO PAST CLASSES.</p>
+            <a class="btn-primary btn btn-book" href="{{ url_for('home') }}">BOOK</a>
+        </div>
+    {% else %}
+        {% for b in bookings %}
+            <div class="upcoming">
+                <div class="col-sm-4 xs-no-padding">
+                    <h2>
+                        {{ b.schedule.studio_class.name }}
+
+                    </h2>
+                </div>
+                <div class="col-sm-4 xs-no-padding ">
+                    <h4>TIME</h4>
+
+                    <h5>{{ b.schedule.start_time.strftime('%I:%M%p') }}
+                        - {{ b.schedule.end_time.strftime('%I:%M%p') }}</h5>
+
+                    <p></p>
+                    <h4>DATE</h4>
+                    <h5>{{ b.schedule.start_time.strftime('%A, %b %d, %Y') }}</h5>
+                </div>
+                <div class="col-sm-4 xs-no-padding ">
+                    <img class="logo" src="{{ b.schedule.studio.photo_url }}"/>
+
+                    <div class="studio">
+                        <h4>{{ b.schedule.studio.name }}</h4>
+                        <h5>{{ b.schedule.studio.address or "" }}</h5>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock classes %}

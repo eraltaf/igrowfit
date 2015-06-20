@@ -1,0 +1,13 @@
+{
+    "main": ".",
+    "devDependencies": {
+    "grunt": "latest",
+    "grunt-sass": "latest",
+    "grunt-contrib-handlebars": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-libsass-image ": "latest"
+  }
+}

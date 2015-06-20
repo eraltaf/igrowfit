@@ -1,0 +1,15 @@
+<h2>{{ booking.sub.user.name }}</h2>
+<p>{{ booking.sub.package.name }}</p>
+<br/>
+<br/>
+<h3>{{ booking.schedule.studio_class.studio.name }}</h3>
+<p>{{ booking.schedule.studio_class.name }}</p>
+<p>{{ booking.schedule.start_time.strftime('%b %d, %Y %H:%M') }}</p>
+
+<br/><br/>
+{% if booking.status=='pending' %}
+Please <a href="{{ url_for('confirm_booking',bid=booking.id|string,_external=True) }}">CONFIRM</a> if you can fullfil the booking.<br/>
+
+<br/>
+{% endif %}
+If you cannot fullfil this booking, please <a href="{{ url_for('reject_booking',bid=booking.id|string,_external=True) }}">REJECT</a> it.

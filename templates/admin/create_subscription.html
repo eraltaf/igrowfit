@@ -1,0 +1,31 @@
+{% extends 'admin/model/create.html' %}
+
+{% block body %}
+    <style>
+        textarea {
+            width: 500px;
+            height: 300px;
+        }
+    </style>
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="{{ return_url }}">{{ _gettext('List') }}</a>
+        </li>
+        <li class="active">
+            <a href="javascript:void(0)">{{ _gettext('Create') }}</a>
+        </li>
+    </ul>
+
+    {% call lib.form_tag(form) %}
+        {{ lib.render_field(form,form.package) }}
+        <div class="control-group">
+        <div class="control-label">
+        </div>
+        <div class="controls"><p>Format: email,name,nric(or employment id),max concurrent booking,max_bookings</p>
+        <p>separated by "," and accepts multiple lines of data</p>
+        </div>
+        </div>
+        {{ lib.render_field(form,form.users) }}
+        {{ lib.render_form_buttons(return_url, extra()) }}
+    {% endcall %}
+{% endblock %}

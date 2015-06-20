@@ -1,0 +1,120 @@
+{% extends "base_template.html" %}
+{% block banner %}
+{% endblock %}
+{% block middle %}
+    <div class="content container dashboard">
+        <div class="col-md-3 summary row hidden-xs hidden-sm">
+            <h4>YOUR SCHEDULE</h4>
+            {% block btns %}
+                <a class="btn-dashboard active" href="{{ url_for('dashboard') }}">UPCOMING CLASSES</a>
+                <a class="btn-dashboard" href="{{ url_for('history') }}">PAST CLASSES</a>
+            {% endblock btns %}
+            <a class="btn-dashboard"
+               href="/logout">LOGOUT</a>
+        </div>
+        <div class="col-md-9 classes row">
+            {% block classes %}
+                <h4>YOUR NEXT CLASS</h4>
+                {% if bookings|length == 0 %}
+
+                    <div class="upcoming" style="text-align:center">
+                        <p style="margin-bottom:10px;">NO CLASSES BOOKED YET.</p>
+                        <a class="btn-primary btn btn-book" href="{{ url_for('home') }}">BOOK</a>
+                    </div>
+                {% else %}
+
+                    {% set b = bookings[0] %}
+                    <div class="first">
+                        <div class="col-sm-12 header">
+                            <h4>CLASS</h4>
+
+                            <h2>{{ b.schedule.studio_class.name }}</h2>
+
+                            {% if b.can_cancel() %}
+                                <div class="cancel-btn" onclick="cancel('{{ b.id }}')">CANCEL</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-4 xs-no-padding" style="padding-left:0">
+                            <div class="date">
+                                <h4>ON</h4>
+
+                                <h1>{{ b.schedule.start_time.strftime('%d') }}</h1>
+
+                                <h3>{{ b.schedule.start_time.strftime('%B') }}</h3>
+                                <h5>{{ b.schedule.start_time.strftime('%A') }}</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 xs-no-padding">
+                            <div class="time">
+                                <h4>FROM</h4>
+
+                                <h2>{{ b.schedule.start_time.strftime('%I:%M%p') }}</h2>
+                                <h4>TO</h4>
+
+                                <h2>{{ b.schedule.end_time.strftime('%I:%M%p') }}</h2>
+                                <h5>({{ b.schedule.duration }} MINUTES)</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 xs-no-padding" style="padding-right:0">
+                            <div class="studio">
+                                <h4>AT</h4>
+                                <img class="logo" style="height:40px;" src="{{ b.schedule.studio.photo_url }}"/>
+
+                                <h3>{{ b.schedule.studio.name }}</h3>
+                                <h5>{{ b.schedule.studio.address or "" }}</h5>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                {% endif %}
+                {% if bookings|length > 1 %}
+                    <h4>YOUR UPCOMING CLASSES</h4>
+                    {% for b in bookings[1:] %}
+                        <div class="upcoming">
+                            <div class="col-sm-4 xs-no-padding">
+                                <h2>
+                                    {{ b.schedule.studio_class.name }}
+
+                                </h2>
+
+                                {% if b.can_cancel() %}
+                                    <div class="cancel-btn" onclick="cancel('{{ b.id }}')">CANCEL</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-4 xs-no-padding ">
+                                <h4>TIME</h4>
+
+                                <h5>{{ b.schedule.start_time.strftime('%I:%M%p') }}
+                                    - {{ b.schedule.end_time.strftime('%I:%M%p') }}</h5>
+
+                                <p></p>
+                                <h4>DATE</h4>
+                                <h5>{{ b.schedule.start_time.strftime('%A, %b %d, %Y') }}</h5>
+                            </div>
+                            <div class="col-sm-4 xs-no-padding ">
+                                <img class="logo" src="{{ b.schedule.studio.photo_url }}"/>
+
+                                <div class="studio">
+                                    <h4>{{ b.schedule.studio.name }}</h4>
+                                    <h5>{{ b.schedule.studio.address }}</h5>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endblock classes %}
+        </div>
+        <div class="summary hidden-md hidden-lg">
+            <h4>YOUR SCHEDULE</h4>
+            {% block mobile_btns %}
+                <a class="btn-dashboard active" href="{{ url_for('dashboard') }}">UPCOMINGCLASSES</a>
+                <a class="btn-dashboard" href="{{ url_for('history') }}">PAST CLASSES</a>
+            {% endblock mobile_btns %}
+            <a class="btn-dashboard"
+               href="/logout">LOGOUT</a>
+        </div>
+    </div>
+
+{% endblock middle %}
+

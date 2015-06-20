@@ -1,0 +1,9 @@
+<h2>{{ booking.sub.user.name }}</h2>
+<p>Your booking is confirmed</p>
+<p>Please note down the time and location in your calender and have fun on that
+    day.</p>
+<h3>{{ booking.schedule.studio.name }}</h3>
+<h3>{{ booking.schedule.studio.address }}</h3>
+<p>{{ booking.schedule.studio_class.name }}</p>
+<p>{{ booking.schedule.start_time.strftime('%b %d, %Y %I:%M %p') }}
+    - {{ booking.schedule.end_time.strftime('%Y %I:%M %p') }} </p>

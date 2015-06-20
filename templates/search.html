@@ -1,0 +1,89 @@
+{% extends "base_template.html" %}
+{% block middle %}
+    {% block banner %}
+    <div class="banner">
+        <h1>GROW FIT TODAY</h1>
+        <h4>The perfect trial class is a click away</h4>
+    </div>
+    {% endblock banner %}
+    <div class="content container">
+        <div class="searchbar">
+            <h4>find the perfect trial class</h4>
+            <form action="{{ url_for('search') }}" method="GET">
+            <input type="text" name="keyword" value="{{request.args.get('keyword','')}}" placeholder="TYPE OF CLASS OR ACTIVITY">
+            <input type="button" value="Date" class="btn btn-primary" />
+            <input type="button" value="Time" class="btn btn-primary" />
+            <input type="hidden" name="date" value="{{request.args.get('date','')}}">
+            <input type="hidden" name="time" value="{{request.args.get('time','')}}">
+            <input type="submit" value="Search" class="btn btn-primary" />
+            </form>
+        </div>
+        
+        <div class="result">
+        {% block result %}
+            <h2>start your workout</h2>
+            <div class="holder">
+                <a href="/search?keyword=yoga">
+                    <div class="category yoga">
+                    <h2>
+                    yoga
+                    </h2>
+                    </div>
+                </a>
+
+                <a href="/search?keyword=kickboxing">
+                    <div class="category kickboxing">
+                    <h2>
+                    kickboxing
+                    </h2>
+                    </div>
+                </a>
+
+                <a href="/search?keyword=pilates">
+                    <div class="category pilates">
+                    <h2>
+                    pilates
+                    </h2>
+                    </div>
+                </a>
+
+                <div class="category aerobics">
+                <h2>
+                aerobics
+                </h2>
+                </div>
+
+                <a href="/search?keyword=zumba">
+                    <div class="category zumba">
+                    <h2>
+                    zumba
+                    </h2>
+                    </div>
+                </a>
+
+                <div class="category bokwa">
+                <h2>
+                bokwa
+                </h2>
+                </div>
+
+                <div class="category aqua-aerobics">
+                <h2>
+                aqua aerobics
+                </h2>
+                </div>
+
+                <div class="category spinning">
+                <h2>
+                spinning
+                </h2>
+                </div>
+            </div>
+        {% endblock result %}
+        </div>
+    </div>
+{% endblock middle %}
+
+{%block script %}
+{{super()}}
+{% endblock script%}

@@ -1,0 +1,68 @@
+{% extends 'simpler_template.html' %}
+{% block user_nav %}
+    <div class="login pull-right">
+        <a href="/logout" class="btn btn-primary">Logout</a>
+    </div>
+{% endblock user_nav %}
+{% block middle %}
+    <div class="content container studio-view">
+        <img src="{{ studio.photo_url }}" class="logo" style="max-width: 200px;height: auto" />
+
+        <h3>{{ studio.name }}</h3>
+
+        <div class="seg">
+
+            <table class="table table-striped tablesorter" id="tablesorter">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Class</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for b in studio.bookings('All') %}
+                    <tr>
+                        <td>{{ b.sub.user.name }} ({{ b.sub.package.name }})
+                        </td>
+                        <td>{{ b.schedule.start_time.strftime('%B %d, %Y %H:%M') }}
+                            - {{ b.schedule.studio_class.name }}</td>
+                        <td>
+                            {% if b.status=='Unmarked' or b.is_today %}
+                                <a class="btn btn-sm btn-primary"
+                                   href="javascript:void(0)"
+                                   onclick="attend(this,'{{ b.id }}','{{ b.sub.user.name }}')">Attended</a>
+                                <a class="btn btn-sm btn-danger"
+                                   href="javascript:void(0)"
+                                   onclick="absent(this,'{{ b.id }}','{{ b.sub.user.name }}')">Absent</a>
+                            {% elif b.status=='Pending' %}
+                                <a class="btn btn-sm btn-danger"
+                                   href="/confirm/{{ b.id }}">Confirm</a> <a
+                                    class="btn btn-sm btn-danger"
+                                    href="/reject/{{ b.id }}">Reject</a>
+                            {% elif b.status=='Confirmed' %}
+                                <a class="btn btn-sm btn-danger"
+                                   href="/reject/{{ b.id }}">Reject</a>
+                            {% else %}
+                                {{ b.status }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="usage seg">
+            <h4>Usage</h4>
+            <ul>
+                {% for s in studio.stocks %}
+                    <li>
+                        <strong>{{ s.start_date.strftime('%b %d, %Y') }}
+                            - {{ s.end_date.strftime('%b %d, %Y') }}:</strong>
+                        {{ s.used }}/{{ s.quantity }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock middle %}

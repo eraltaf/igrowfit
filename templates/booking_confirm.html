@@ -1,0 +1,10 @@
+{% extends 'simpler_template.html' %}
+{% block user_nav %}
+    {#    Overwrite base_template to remove user_nav#}
+{% endblock user_nav %}
+{% block middle %}
+    <div class="single_form">
+        <h2>{{ result['result'] }}</h2>
+        <h4>{{ result['message']|safe }}</h4>
+    </div>
+{% endblock middle %}

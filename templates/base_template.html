@@ -1,0 +1,159 @@
+{% extends "bootstrap/base.html" %}
+{% block styles %}
+    <link rel='stylesheet'
+          href="{{ url_for('static',filename='css/styles.css') }}"
+          type='text/css' media='all'/>
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png',_external=True) }}">
+    <!--[if IE]>
+        <link rel="shortcut icon" href="http://ospicon.com/wp-content/themes/ospicon/favicon.ico">
+        <![endif]-->
+{% endblock %}
+
+{% block title %}
+    iGrowFit
+{% endblock title %}
+
+
+{% block content %}
+    <div class="header">
+        <div class="navbar container">
+            <a href="/" class="logo img-btn pull-left">iGrowFit</a>
+            {% block login %}
+                {% if not current_user.is_authenticated() %}
+                    <div class="login pull-right ">
+                        <form action="/login" method="POST" name="login_user_form">
+                            {{ login_form.csrf_token }}
+                            <input type="hidden" value="/dashboard" name="next"/>
+                            <input type="email" class="hidden-xs hidden-sm" required name="email" placeholder="EMAIL"/>
+                            <input type="password" class="hidden-xs hidden-sm" required name="password"
+                                   placeholder="PASSWORD"/>
+                            <input type="submit" class="btn btn-primary" value="LOGIN" onclick="login();"/>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="user pull-right">
+                <span class="hidden-xs">
+                    WELCOME BACK, <a href="{{ url_for('dashboard') }}">{{ user.name|upper }}</a>
+                </span>
+                <span class="hidden-md hidden-lg hidden-sm">
+                    <a href="{{ url_for('dashboard') }}">DASHBOARD</a>
+                </span>
+                    </div>
+                {% endif %}
+            {% endblock login %}
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    {% block banner %}
+        <div class="banner"
+             style="background-image:url({{ url_for('static',filename='images/'+banner.image) }})">
+            <h1>{{ banner.header }}</h1>
+            <h4>{{ banner.sub_header }}</h4>
+        </div>
+    {% endblock banner %}
+    {% block middle %}
+
+    {% endblock middle %}
+    {% block rewards %}
+        <div class="rewards container content">
+            <h2>Our Rewards Scheme</h2>
+
+            <div class="bg">
+                <img src="{{ url_for('static',filename='images/icon-rewards.png') }}" class="img-responsive icon"/>
+
+                <p>
+                    {{ lipsum(2) }}
+                </p>
+            </div>
+        </div>
+    {% endblock rewards %}
+    {% block participating %}
+        <div class="participating-studios container content">
+            <h2>List of Participating Studios</h2>
+
+            <div class="holder">
+                {% for s in entitled_studios %}
+                    <a href="/?keyword={{ s.name }}">
+                        <div class="participating-studio">
+
+                            <img class="logo" src="{{ s.photo_url }}"/>
+
+                            <div class="desc">
+                                <h2>{{ s.name }}</h2>
+                                <h5>{{ s.address or '' }}</h5>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endblock participating %}
+    <hr class="footer-hr"/>
+    <div class="footer container">
+        <div>
+            <img class="igrow-logo" src="{{ url_for('static',filename='images/logo.png') }}"/>
+        </div>
+        <div class="row">
+            <div class="col-sm-5">
+                <h3>ABOUT IGROWFIT</h3>
+
+                <p>{{ lipsum(1) }}</p>
+
+                <p>
+                    <a href="mailto:enquiries@igrow.sg">Click here</a> to send us your feedback or suggestions
+                </p>
+            </div>
+            <div class="col-md-3 col-sm-3 col-md-offset-1">
+                <h3>CONTACT US</h3>
+
+                <p>
+                    26 Sin Ming Lane<br/>
+                    #05-127 Midview City<br/>
+                    Singapore 573971<br/><br/>
+
+                    Tel: +65 - 68718777<br/>
+                    Fax: +65 - 66319777<br/>
+
+                    <a href="mailto:enquiries@igrow.sg">enquiries@igrow.sg</a>
+
+                </p>
+                <br/>
+                <br/>
+            </div>
+
+            <div class="col-md-3 col-sm-4">
+                {% block footer_btns %}
+                    <a class="btn btn-primary" href="javascript:void(0)" onclick="slideTo('.searchbar');">BOOK A
+                        CLASS</a><br/>
+                    <a class="btn btn-primary" href="javascript:void(0)" onclick="slideTo('.rewards');">GET REWARDED</a>
+                    <br/>
+                {% endblock footer_btns %}
+                <a class="btn btn-primary" href="{{ url_for('about') }}">ABOUT THE PROGRAM</a>
+                <a class="btn btn-primary" href="{{ url_for('faq') }}">FAQs</a>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="bottom">
+            <div class="pull-left">@2014 iGrow</div>
+            <div class="pull-right">
+                <ul>
+                    <li><a href="{{ url_for('terms') }}">Terms</a></li>
+                    <li><a href="{{ url_for('privacy') }}">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+    <script>
+        var is_loggedin ={{ current_user.is_authenticated()|lower }};
+    </script>
+    <script src="{{ url_for('static',filename='js/scripts.min.js') }}"></script>
+{% endblock scripts %}
